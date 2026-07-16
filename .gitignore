@@ -1,0 +1,33 @@
+# 대용량 바이너리 (100MB+ GitHub 파일 사이즈 제한)
+*.safetensors
+*.onnx
+*.nb
+*.data
+*.pkl
+
+# HuggingFace 다운로드
+M1_smollm2/work/models/
+M1_smollm2/work/generated/*/real_llm*.onnx
+
+# Acuity 산출물 중 대용량
+M1_smollm2/acuity_out/*/*.data
+M1_smollm2/acuity_out/*/wksp_nbg*/network_binary.nb
+M1_smollm2/acuity_out/*/wksp_nbg*/*.data
+
+# M0 산출물 (재현 가능)
+M0_op_validation/import_results/*.json
+M0_op_validation/import_results/*.data
+M0_op_validation/onnx_dummies/
+
+# 참고용 클론 리포 (별도 upstream)
+a733_npu_driver/
+
+# 임시/캐시
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+*.tmp
+
+# scripts 는 petayyyy 원본에서 복사한 것 (참고용 유지하되 대용량 제외)
+M1_smollm2/scripts/**/*.pyc
