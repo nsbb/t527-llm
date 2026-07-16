@@ -44,8 +44,10 @@ t527-llm/
 | 리서치 (5 리포트) | ✅ 완료 | 공개된 T527 LLM 포팅 0건. 참고: petayyyy/a733_npu_driver (A733 SmolLM2 21 tok/s) |
 | PLAN.md 종합 | ✅ 완료 | 4단계 검증 사다리 (M0→M1→M2→M3) 확정 |
 | **M0**: Acuity 6.12 op 지원 실측 | ✅ 완료 | 33/33 op 커버 (native 30 + 조립 3) |
-| **M1**: SmolLM2-135M → T527 NB | ✅ **컴파일 성공** | `network_binary.nb` 124MB, `PID0X10000016` 대응 |
-| M1: 디바이스 실행 & 정확도 검증 | ⏳ 대기 | vpm_run + tok/s 실측 |
+| **M1**: SmolLM2-135M → T527 NB | ✅ **컴파일 + 디바이스 실행 성공** | uint8 NB 124MB @ 10.9 tok/s, FP32 NB 626MB @ 0.14 tok/s |
+| **M1**: Acuity 6.12 ReduceMean 축 버그 발견 & 수정 | ✅ **M1 대박 finding** | 61 ReduceMean axes=[2]→[-1], FP32 32/32 match 복구 |
+| **M1**: FP32 정확도 검증 | ✅ | ORT FP32 vs Acuity FP32 argmax 32/32 match, T527 NPU FP32 real prompt에서 coherent tokens |
+| M1: uint8/int16 양자화 정확도 | ⚠️ | 양자화 손실 심각 (LLM outlier activation), M2에서 SmoothQuant로 해결 |
 | **M2**: Qwen2.5-0.5B 한국어 파일럿 | ⏳ | SmoothQuant + KV cache 전략 도입 |
 | **M3**: Midm-2.0-Mini (2.3B, MIT) | ⏳ | 상용 배포 가능한 한국어 LLM |
 
