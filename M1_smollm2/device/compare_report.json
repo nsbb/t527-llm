@@ -1,0 +1,4 @@
+{
+  "fp32_argmax": 198,
+  "npu_argmax": 1,
+  "top1_match_last": 

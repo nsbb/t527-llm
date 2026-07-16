@@ -1,1 +1,1 @@
-token_ids.raw
+token_ids.npy
