@@ -31,3 +31,10 @@ __pycache__/
 
 # scripts 는 petayyyy 원본에서 복사한 것 (참고용 유지하되 대용량 제외)
 M1_smollm2/scripts/**/*.pyc
+
+# M1 device outputs (regenerable)
+M1_smollm2/device/output_*.dat
+M1_smollm2/device/*.log
+M1_smollm2/device/fp32_logits.npy
+M1_smollm2/acuity_out/*/inf_fp32/
+M1_smollm2/acuity_out/*/wksp_nbg_dfp16*/
