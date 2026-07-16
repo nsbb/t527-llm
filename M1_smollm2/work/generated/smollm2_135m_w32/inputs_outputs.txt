@@ -1,0 +1,1 @@
+--inputs token_ids --input-size-list '32' --outputs logits
