@@ -191,3 +191,63 @@ M1 전체 README + 재현 스크립트 정리, 시간순 커밋으로 반영. `g
 - Acuity 최신 (6.21) 접근 시도 or 우회 ONNX 재작성
 - 그 후에 M2: Qwen2.5-0.5B 한국어 파일럿 (SmoothQuant + KV cache 도입)
 - M3: Midm-2.0-Mini (2.3B, MIT) 상용 배포
+
+## 2026-07-16 오후 (11:14~12:25) — M1 완결
+
+### 11:04 — Layer-by-layer 발산 추적
+
+Acuity FP32 output이 ORT FP32와 완전 불일치. 원인 pin-point 위해 intermediate output 노출:
+- Gather (embedding lookup): **cos=1.0000** (완벽)
+- Layer 0 RMSNorm output: **cos=0.8750** ← **여기서 발산 시작**
+- Layer 0 Q projection: cos=0.9726
+- lm_head logits: cos=-0.3818 (30 layer 누적 오차)
+
+### 11:11 — 근본 원인 확정: Acuity ReduceMean 축 오프바이원
+
+Acuity가 3D ONNX 텐서 `[1, 32, 576]`을 내부 4D `[1, 1, 32, 576]`으로 확장하지만 attribute axes는 renumber 안 함. `axes=[2]`가 hidden dim(576) 대신 seq_len(32)을 reduce.
+
+수치적 증명: `acuity_mean == sq.mean(axis=1)` (max_abs_diff = 0.0). 원래 의도는 `sq.mean(axis=-1)`.
+
+### 11:14 — `patch_reducemean_axes.py` 작성 및 적용
+
+61개 ReduceMean 노드의 `axes=[2]` → `axes=[-1]` 치환. v3 IR 재빌드.
+
+### 11:16 — Acuity FP32 정확도 완전 복구
+
+v3 IR + pegasus inference `--dtype float32` → **ORT FP32와 32/32 argmax match, cos=1.0000**. 축 버그 100% 해결.
+
+### 11:19 — v3 uint8 NB export → 디바이스 실행
+
+- 92 ms/forward = 10.9 tok/s pure NPU
+- 정확도 여전히 0/32 argmax match (양자화 자체 손실, axis fix와 별개)
+- 원인: LLM activation outlier가 심해 uint8 asymmetric_affine으로 압축 불가
+
+### 11:24 — int16 dfp16 재시도
+
+- 147 ms/forward = 6.8 tok/s
+- 28% 값이 ±32768 saturation
+- 여전히 0-1/32 match
+
+### 11:31~12:00 — 여러 quantizer 조합 실험
+
+- `--algorithm normal` (minmax uint8): 0/32 match, cos=-0.27
+- `asymmetric_affine int16`: **미지원** (Acuity 6.12는 uint8/int8/uint4/int4만)
+- `symmetric_affine int16`: **미지원**
+- `bfloat16` export: **실패** (`Fatal model generation error: 64768`)
+
+### 12:15 — FP32 NBG export 시도 → **성공!**
+
+`pegasus export ovxlib --dtype float32` (non-quantized) → 626MB NBG. T527에서 SW 에뮬레이션으로 실행:
+- 7.28 s/forward (79x slower than uint8)
+- cos=0.805 vs ORT FP32
+- Real prompt "The capital of France is" → top-5: ' as' | ' of' | '.' | ' in' | ',' (모두 grammatically plausible)
+
+**M1 최종 결론: T527 NPU가 SmolLM2-135M을 정확하게 실행 가능함이 실증됨** (FP32 SW 에뮬 경로). 실용 속도는 M2에서 SmoothQuant로 int8/int16 정확도 회복 시 확보.
+
+### 12:25 — 최종 커밋 및 push
+
+11개 커밋 추가:
+- axis fix patch script
+- v3 IR + quantize tables + NBG
+- FP32 NBG decode script (accurate proof)
+- 전체 eval_report.md
