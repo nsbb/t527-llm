@@ -24,10 +24,10 @@
             "quantizer": "asymmetric_affine",
             "quantize": {
                 "qtype": "u8",
-                "max_value": 29.9711856842041,
-                "min_value": -18.77526092529297,
-                "scale": 0.19116252660751343,
-                "zero_point": 98
+                "max_value": 29.613723754882812,
+                "min_value": -18.74513816833496,
+                "scale": 0.18964260816574097,
+                "zero_point": 99
             }
         }
     },

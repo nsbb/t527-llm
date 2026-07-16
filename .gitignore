@@ -52,3 +52,6 @@ M1_smollm2/acuity_out/smollm2_debug_rms/
 M1_smollm2/acuity_out/*/inf_u8_minmax/
 M1_smollm2/acuity_out/*/*_dfp16.quantize
 M1_smollm2/acuity_out/*/*_u8_minmax.quantize
+M1_smollm2/acuity_out/*/inf_calib10/
+M1_smollm2/acuity_out/*/wksp_nbg_calib10*/
+M1_smollm2/acuity_out/*/export_calib10.log
