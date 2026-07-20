@@ -99,8 +99,13 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 - 15:26 — **★★ uint8's zero_point ABSORBS the accumulator bias** — real English tokens in top-5 now
 - 15:30 — Multi-token generation: 1.68 tok/s end-to-end, prompts produce varied token streams with common English chars
 - 15:32 — wiki/techniques/cpu-lm-head.md created — comprehensive analysis
+- 15:42 — Qwen hidden NBG 349MB export
+- 15:43 — Device test: hidden cos 0.006~0.46 varies by prompt. English works better than Korean.
+- 15:45 — Root cause: SmoothQuant absorbed scale into final RMSNorm gamma → hidden max=214 → uint8 step 1.56 (8x coarser than SmolLM2's 0.20)
+- 15:47 — Larger model = more accumulator drift compounds with coarser quantization scale
+- 15:50 — Wiki: wiki/results/qwen-hidden-device.md
 ## Rules
 
 - Only append. Never edit past entries.
 - Every entry ties to a specific commit if code was pushed
-- Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.- 14:15 — W=16 SmolLM2 SmoothQuant + int16 quantize (10 English calib)- 14:41 — W=8 SmolLM2 NBG export (264 MB), device sat=38% (higher than W=32 because Acuity auto-picked fl=10 range ±32)- 15:05 — CPU-side lm_head approach: cut lm_head off NPU graph, output final_rms_out hidden state, run final MatMul on host
+- Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.- 14:15 — W=16 SmolLM2 SmoothQuant + int16 quantize (10 English calib)- 14:41 — W=8 SmolLM2 NBG export (264 MB), device sat=38% (higher than W=32 because Acuity auto-picked fl=10 range ±32)- 15:05 — CPU-side lm_head approach: cut lm_head off NPU graph, output final_rms_out hidden state, run final MatMul on host- 15:38 — Qwen SmoothQuant + hidden output uint8 quantize (24-layer, 143MB IR)

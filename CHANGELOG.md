@@ -4,6 +4,23 @@ T527 NPU LLM 포팅 프로젝트. 날짜/버전별 진행 기록.
 
 ---
 
+## v0.10.5 — 2026-07-20 (Qwen hidden 실측: 크기 스케일링 문제)
+
+**Qwen SmoothQuant + uint8 hidden NB 실측 결과.**
+
+- SmolLM2 hidden trick 그대로 이식 → 349MB NB export 성공
+- Device 실측 cos: English 0.31~0.46, Korean 0.006~0.14 (variance 큼)
+- 원인: **SmoothQuant가 final RMSNorm gamma로 outlier magnitude 흡수 → hidden range ±214 → uint8 scale 1.56** (SmolLM2 scale 0.20의 8배)
+- Qwen 24 layers × wider FFN → NPU 누적 drift도 더 큼
+
+Wiki: `wiki/results/qwen-hidden-device.md`
+
+교훈: 파이프라인은 작동하지만 500M+ 모델은 quantization + drift 이중고. Midm-2.0 (2B) 그대로 시도하면 더 나빠질 것.
+
+Commit: (this one)
+
+---
+
 ## v0.10.0 — 2026-07-20 (★★ CPU-side lm_head + uint8 hidden: real English tokens)
 
 **결정적 진전**: LM head를 NPU 그래프에서 잘라내고 hidden state만 device에서 계산, 최종 MatMul은 host CPU에서 FP32로.
