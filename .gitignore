@@ -110,3 +110,12 @@ M2_qwen/acuity_out/qwen_hidden_clip/wksp_nbg*/
 M2_qwen/acuity_out/qwen_hidden_clip/*.log
 M2_qwen/work/generated/*/real_llm_sq_hidden_clip.onnx
 M2_qwen/acuity_out/qwen_hidden/qwen_hidden_u8_sharp.quantize
+M2_qwen/acuity_out/qwen_hidden_sq03/*.data
+M2_qwen/acuity_out/qwen_hidden_sq03/wksp_nbg*/
+M2_qwen/acuity_out/qwen_hidden_sq03/*.log
+M2_qwen/acuity_out/qwen_hidden_gs/*.data
+M2_qwen/acuity_out/qwen_hidden_gs/wksp_nbg*/
+M2_qwen/acuity_out/qwen_hidden_gs/*.log
+M2_qwen/work/generated/*/real_llm_sq03*.onnx
+M2_qwen/work/generated/*/real_llm_sq_hidden_gscaled.onnx
+M2_qwen/host_gscale.npy

@@ -4,6 +4,29 @@ T527 NPU LLM 포팅 프로젝트. 날짜/버전별 진행 기록.
 
 ---
 
+## v0.11.0 — 2026-07-20 (Gamma scaling: 표면 개선 있으나 근본 해결 아님)
+
+**최종 실험: `final_rms_gamma /= 8` 로 hidden range 축소 → host에서 K=8 복원.**
+
+- ONNX 재빌드: gamma 8배 축소 → hidden max 214→27 (uint8 scale 1.56→0.19)
+- Device std 1.20 (ORT 1.34에 근접), 하지만 **cos 동일** (0.31 for France)
+
+교훈: NPU int8 산술의 시스템적 drift는 quantization scale과 무관. Numerical한 문제이지 표현력의 문제 아님.
+
+**최종 상태 (M2 partial win)**:
+- SmolLM2 hidden uint8: cos 0.45, English tokens
+- Qwen hidden uint8: cos 0.006-0.46 (varies), English tokens for math/simple, Korean weak
+
+M2/M3 completion 위한 남은 방향:
+1. Chunked decoder (per-layer NB, host FP32 in between)
+2. QAT (quantization-aware training) — 인프라 큰 투자
+3. Newer Acuity 버전 (6.21+) 접근 가능성 조사
+4. Alternative NPU (RK3588 rknn-llm 결과와 비교)
+
+Commit: (this one)
+
+---
+
 ## v0.10.7 — 2026-07-20 (Hidden scale sharpening 실험: 실패)
 
 **Qwen hidden output uint8 scale=1.56 → 더 fine하게 만들려는 시도.**
