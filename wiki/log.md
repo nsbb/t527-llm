@@ -85,8 +85,11 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 - 13:17 — **★ First-token semantic success**: 'def hello' → argmax token 24 = `(`  (correct Python next-token)
 - 13:18 — Multi-token greedy: first token often correct, then degrades (`def hello(5)/�?2/9:`) — saturation feedback loop
 - 13:22 — Result page wiki/results/smollm2-sq-int16-device.md
+- 14:28 — W=16 NBG export 264MB success
+- 14:35 — Device test: saturation reduced 19% → 11% (W=16 halves activation memory) but top-5 still tied at int16 max (fl=9 → ±64.0)
+- 14:36 — argmax varies per prompt with W=16, but semantically weak (small model + still-saturating output)
 ## Rules
 
 - Only append. Never edit past entries.
 - Every entry ties to a specific commit if code was pushed
-- Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.
+- Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.- 14:15 — W=16 SmolLM2 SmoothQuant + int16 quantize (10 English calib)

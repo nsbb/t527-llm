@@ -87,3 +87,7 @@ M1_smollm2/acuity_out/smollm2_sq/inf*/
 M1_smollm2/acuity_out/smollm2_sq/*.log
 M2_qwen/acuity_out/*/qwen25_0_5b_w32_sq_bf16.quantize
 M1_smollm2/work/generated/smollm2_135m_w32/real_llm_sq.onnx
+M1_smollm2/acuity_out/smollm2_w16_sq/*.data
+M1_smollm2/acuity_out/smollm2_w16_sq/wksp_nbg*/
+M1_smollm2/acuity_out/smollm2_w16_sq/*.log
+M1_smollm2/work/generated/smollm2_135m_w16/

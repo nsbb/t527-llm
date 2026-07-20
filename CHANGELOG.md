@@ -4,6 +4,19 @@ T527 NPU LLM 포팅 프로젝트. 날짜/버전별 진행 기록.
 
 ---
 
+## v0.8.5 — 2026-07-20 (W=16 실측: saturation 절반)
+
+**Window 축소 실험: W=32 → W=16.**
+
+- SmolLM2 SmoothQuant α=0.5 + int16 dfp, W=16 static ONNX (514MB) → NBG 264MB
+- Device saturation: **19% → 11%** (activation size 절반 효과 확인)
+- Argmax는 여전히 saturation tie-break, top-5 전부 +63.998 (fl=9 max)
+- W=8 이하로 더 줄이면 saturation 계속 감소할지 실험 대상
+
+Commit: (this one)
+
+---
+
 ## v0.8.0 — 2026-07-20 (SmolLM2 SmoothQuant + int16 device: 첫 토큰 semantic 성공)
 
 **M1 SmolLM2 SmoothQuant + int16 dfp NBG (267 MB) 디바이스 실측.**
