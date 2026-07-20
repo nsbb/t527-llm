@@ -1,0 +1,35 @@
+{
+    "Inputs": {
+        "token_ids_2750": {
+            "name": "token_ids",
+            "shape": [
+                1,
+                1,
+                32
+            ],
+            "format": "nchw",
+            "dtype": "int32"
+        }
+    },
+    "Outputs": {
+        "attach_Mul_final_rms_gamma/out0_0": {
+            "name": "attach_Mul_final_rms_gamma/out0",
+            "shape": [
+                1,
+                1,
+                32,
+                576
+            ],
+            "format": "nchw",
+            "quantizer": "asymmetric_affine",
+            "quantize": {
+                "qtype": "u8",
+                "max_value": 55.64755630493164,
+                "min_value": -26.381546020507812,
+                "scale": 0.32168275117874146,
+                "zero_point": 82
+            }
+        }
+    },
+    "Recurrent_connections": {}
+}

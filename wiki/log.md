@@ -92,8 +92,15 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 - 14:46 — Wide-fl NBG export 267MB
 - 14:47 — Device test: **saturation 19% → 4.7%** (fl=8 gives range ±128) but top-5 still all tied at ±128.0
 - 14:50 — Confirmed: device NPU int16 output values 2x+ FP32 range even with wide fl → true numerical drift limit
+- 15:15 — patch_output_hidden.py implemented — extract final_rms_out, save token_embed.npy
+- 15:16 — SmolLM2 SmoothQuant + int16 hidden NBG: 222MB, sat=0.05% (great!) but hidden cos vs ORT = -0.17 (device std 14.4 vs ORT 1.68 = 8x amplified)
+- 15:20 — Discovered int16 dfp accumulator has systematic BIAS not absorbed
+- 15:25 — SmolLM2 SmoothQuant + uint8 hidden NBG: 104MB, hidden cos = 0.45 (much better!)
+- 15:26 — **★★ uint8's zero_point ABSORBS the accumulator bias** — real English tokens in top-5 now
+- 15:30 — Multi-token generation: 1.68 tok/s end-to-end, prompts produce varied token streams with common English chars
+- 15:32 — wiki/techniques/cpu-lm-head.md created — comprehensive analysis
 ## Rules
 
 - Only append. Never edit past entries.
 - Every entry ties to a specific commit if code was pushed
-- Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.- 14:15 — W=16 SmolLM2 SmoothQuant + int16 quantize (10 English calib)- 14:41 — W=8 SmolLM2 NBG export (264 MB), device sat=38% (higher than W=32 because Acuity auto-picked fl=10 range ±32)
+- Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.- 14:15 — W=16 SmolLM2 SmoothQuant + int16 quantize (10 English calib)- 14:41 — W=8 SmolLM2 NBG export (264 MB), device sat=38% (higher than W=32 because Acuity auto-picked fl=10 range ±32)- 15:05 — CPU-side lm_head approach: cut lm_head off NPU graph, output final_rms_out hidden state, run final MatMul on host

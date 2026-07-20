@@ -4,6 +4,24 @@ T527 NPU LLM 포팅 프로젝트. 날짜/버전별 진행 기록.
 
 ---
 
+## v0.10.0 — 2026-07-20 (★★ CPU-side lm_head + uint8 hidden: real English tokens)
+
+**결정적 진전**: LM head를 NPU 그래프에서 잘라내고 hidden state만 device에서 계산, 최종 MatMul은 host CPU에서 FP32로.
+
+- `patch_output_hidden.py`: ONNX에서 final_rms_out 노출, lm_head 제거
+- SmolLM2 hidden NB uint8: **104MB, saturation 0.05%**
+- 결정적 발견: **int16 hidden은 std 8배 부풀림** (accumulator bias), **uint8은 zero_point가 bias 흡수** → cos 0.45 (vs int16의 -0.17)
+- Multi-token 생성 결과: 실제 영어 tokens `,` `.` ` and` `\n` ` only` `'s` 등 (더 이상 Rothschild-tier 랜덤 아님)
+- Speed: 1.68 tok/s end-to-end (adb 포함, pure NPU ~100ms 훨씬 작은 NB)
+
+**진짜 배포 recipe 확정**: SmoothQuant + uint8 asymmetric_affine + hidden-output NB + host lm_head.
+
+Wiki: `wiki/techniques/cpu-lm-head.md`
+
+Commit: (this one)
+
+---
+
 ## v0.9.0 — 2026-07-20 (Wide-fl 실측: 진짜 device drift 벽)
 
 **W 축소 실험(W=8)로 sat 오히려 증가 (Acuity auto-fl 문제).**
