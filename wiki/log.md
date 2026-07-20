@@ -82,4 +82,6 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 
 - Only append. Never edit past entries.
 - Every entry ties to a specific commit if code was pushed
-- Findings marked with ★ = notable, ★★ = breakthrough
+- Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.
+- 13:07 — Hardware precision table added to wiki/hardware/t527-vip9000.md
+- 13:10 — Strategy pivot: any coherent-generation solution MUST fit within uint8/int16 fixed-point. qbf16 host wins are informational only.

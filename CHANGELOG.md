@@ -4,6 +4,24 @@ T527 NPU LLM 포팅 프로젝트. 날짜/버전별 진행 기록.
 
 ---
 
+## v0.7.5 — 2026-07-20 (Hardware reality check)
+
+**결정적 재해석: T527 VIP9000-NanoSI-Plus는 INT8 HW only.**
+
+- FP16 / bf16 / qbf16 / FP32 — NPU에 하드웨어 없음
+- Acuity NBG export `Fatal 64768` = 컴파일러가 없는 HW를 위한 코드 emit 거부 (버그 아님, 올바른 동작)
+- SmolLM2 FP32 NB (626MB, 7.28s/forward)는 CPU fallback SW emulation — 실사용 불가
+- **실전 배포는 uint8 or int16 이외 선택지 없음**
+- qbf16 host 30/32 결과는 정보용, 디바이스 이식 불가
+
+`wiki/hardware/t527-vip9000.md` 정밀도 지원 테이블 추가.
+
+다음 방향: `--hybrid` 모드 or per-layer manual quantize seed로 uint8+int16 mix.
+
+Commit: (this one)
+
+---
+
 ## v0.7.0 — 2026-07-20 (SmoothQuant + qbfloat16 near-FP32 host)
 
 **★★★ SmoothQuant α=0.5 + qbfloat16 host inference로 30/32 argmax match, cos=0.9965 달성.**
