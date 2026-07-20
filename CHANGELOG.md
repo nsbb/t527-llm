@@ -4,6 +4,26 @@ T527 NPU LLM 포팅 프로젝트. 날짜/버전별 진행 기록.
 
 ---
 
+## v0.6.0 — 2026-07-20 (Karpathy LLM Wiki 패턴 도입)
+
+**저장소 내 wiki 구조 세팅.**
+
+- `wiki/schema.md`: 3-layer 아키텍처 (raw / wiki / schema) 규약
+- `wiki/index.md`: 마스터 네비게이션
+- `wiki/log.md`: append-only chronological
+- `wiki/models/`: smollm2-135m.md, qwen25-05b.md
+- `wiki/hardware/`: t527-vip9000.md
+- `wiki/techniques/`: axis-fix-patch.md, last-slice-patch.md, smoothquant.md
+- `wiki/issues/`: acuity-reducemean-axis.md, llm-outlier-saturation.md, host-vs-device-drift.md
+- `wiki/results/`: qwen-sq-int16-host.md
+- `raw/catalog.tsv`: 12개 raw source 등록
+
+패턴: [Karpathy gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f). 앞으로 매 발견마다 raw catalog + source note + 관련 wiki 페이지 + log.md + CHANGELOG.md 갱신 후 커밋.
+
+Commit: (this one)
+
+---
+
 ## v0.5.0 — 2026-07-20 (SmoothQuant 도입)
 
 **M2 Qwen SmoothQuant 첫 실측.**

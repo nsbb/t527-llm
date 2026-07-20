@@ -1,0 +1,13 @@
+id	title	path	kind	added	sha256_prefix	note
+src-petayyyy-a733	petayyyy/a733_npu_driver clone	../a733_npu_driver/	repo	2026-07-15	live	Upstream reference impl, gitignored
+src-smollm2-hf	HuggingFaceTB SmolLM2-135M-Instruct	M1_smollm2/work/models/smollm2-135m-instruct/	hf-model	2026-07-15	live	257 MB bf16 safetensors
+src-qwen25-05b-hf	Qwen/Qwen2.5-0.5B-Instruct	M2_qwen/work/models/qwen2.5-0.5b-instruct/	hf-model	2026-07-20	live	943 MB bf16 safetensors
+src-acuity-6.12	Acuity Toolkit 6.12.0 binary	/home/nsbb/travail/T527/acuity-toolkit-binary-6.12.0/	toolchain	2026-07-15	live	Pegasus compiler
+src-vivante-5.7.2	VivanteIDE 5.7.2	/home/nsbb/VeriSilicon/VivanteIDE5.7.2/	toolchain	2026-07-15	live	NBG compiler backend
+src-allwinner-op-pdf	NPU_算子支持列表.pdf	../docs/acuity_toolkit/NPU模块开发指南/NPU_算子支持列表.pdf	vendor-doc	2026-07-15	live	Acuity 6.21 op support (broader than TIM-VX)
+src-karpathy-wiki	Karpathy LLM Wiki gist	external	pattern	2026-07-20	external	https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+src-research-report-1	research_allwinner.md	../research_allwinner.md	research	2026-07-15	live	Official/vendor landscape
+src-research-report-2	research_verisilicon.md	../research_verisilicon.md	research	2026-07-15	live	TIM-VX/Acuity op coverage
+src-research-report-3	research_community.md	../research_community.md	research	2026-07-15	live	Real porting attempts
+src-research-report-4	research_reference_npus.md	../research_reference_npus.md	research	2026-07-15	live	RK3588 RKLLM blueprint
+src-research-report-5	research_korean_llm_quantization.md	../research_korean_llm_quantization.md	research	2026-07-15	live	Korean LLM candidates + PTQ deep dive
