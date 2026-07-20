@@ -4,6 +4,26 @@ T527 NPU LLM 포팅 프로젝트. 날짜/버전별 진행 기록.
 
 ---
 
+## v0.10.7 — 2026-07-20 (Hidden scale sharpening 실험: 실패)
+
+**Qwen hidden output uint8 scale=1.56 → 더 fine하게 만들려는 시도.**
+
+1. patch_hidden_scale.py로 .quantize의 max_value 수동 축소 → Acuity export가 .data에서 원본 scale 재사용, 무시됨
+2. --hybrid re-quantize → calibration이 range 재계산, 원상복구
+3. **ONNX에 Clip[-50, 50] 노드 삽입** → 성공적으로 scale=0.39 얻음 (4배 fine)
+4. 그러나 device 실측 cos **오히려 감소** (0.31→0.16 for France) — clip이 tail 정보 손실 유발
+
+교훈: SmoothQuant가 outlier magnitude를 hidden state로 이전한 결과, 이 값들이 실제 정보를 담고 있음. Clip으로 잘라내면 오히려 hurt.
+
+M2 남은 방향:
+- SmoothQuant α=0.3 (덜 aggressive → hidden에 덜 이전)
+- Chunked decoder (레이어별 별도 NB로 drift 격리)
+- 캘리브레이션 100+ Korean-heavy prompts
+
+Commit: (this one)
+
+---
+
 ## v0.10.5 — 2026-07-20 (Qwen hidden 실측: 크기 스케일링 문제)
 
 **Qwen SmoothQuant + uint8 hidden NB 실측 결과.**

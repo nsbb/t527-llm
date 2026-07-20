@@ -104,8 +104,12 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 - 15:45 — Root cause: SmoothQuant absorbed scale into final RMSNorm gamma → hidden max=214 → uint8 step 1.56 (8x coarser than SmolLM2's 0.20)
 - 15:47 — Larger model = more accumulator drift compounds with coarser quantization scale
 - 15:50 — Wiki: wiki/results/qwen-hidden-device.md
+- 16:12 — But Acuity export re-uses original scale from .data — my .quantize edit ignored
+- 16:15 — --hybrid re-quantize also re-calibrates from data → same scale (1.56)
+- 16:18 — Inserted ONNX Clip[-50, 50] node before final_rms_out → forced max_value=50 at calibration → scale=0.39 (4x finer)
+- 16:30 — Device test with clipped NBG: cos WORSE (0.31→0.16 for France). Clip loses information tail. Trade-off resolution vs clip error, clip loses.
 ## Rules
 
 - Only append. Never edit past entries.
 - Every entry ties to a specific commit if code was pushed
-- Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.- 14:15 — W=16 SmolLM2 SmoothQuant + int16 quantize (10 English calib)- 14:41 — W=8 SmolLM2 NBG export (264 MB), device sat=38% (higher than W=32 because Acuity auto-picked fl=10 range ±32)- 15:05 — CPU-side lm_head approach: cut lm_head off NPU graph, output final_rms_out hidden state, run final MatMul on host- 15:38 — Qwen SmoothQuant + hidden output uint8 quantize (24-layer, 143MB IR)
+- Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.- 14:15 — W=16 SmolLM2 SmoothQuant + int16 quantize (10 English calib)- 14:41 — W=8 SmolLM2 NBG export (264 MB), device sat=38% (higher than W=32 because Acuity auto-picked fl=10 range ±32)- 15:05 — CPU-side lm_head approach: cut lm_head off NPU graph, output final_rms_out hidden state, run final MatMul on host- 15:38 — Qwen SmoothQuant + hidden output uint8 quantize (24-layer, 143MB IR)- 16:10 — patch_hidden_scale.py written (force max/min for output tensor via quantize edit)

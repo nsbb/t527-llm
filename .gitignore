@@ -105,3 +105,8 @@ M2_qwen/acuity_out/qwen_hidden/wksp_nbg*/
 M2_qwen/acuity_out/qwen_hidden/*.log
 M2_qwen/token_embed.npy
 M2_qwen/work/generated/qwen2.5_0.5b_w32/real_llm_sq_hidden.onnx
+M2_qwen/acuity_out/qwen_hidden_clip/*.data
+M2_qwen/acuity_out/qwen_hidden_clip/wksp_nbg*/
+M2_qwen/acuity_out/qwen_hidden_clip/*.log
+M2_qwen/work/generated/*/real_llm_sq_hidden_clip.onnx
+M2_qwen/acuity_out/qwen_hidden/qwen_hidden_u8_sharp.quantize
