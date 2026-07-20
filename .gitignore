@@ -66,3 +66,9 @@ M2_qwen/acuity_out/*/*.log
 M2_qwen/device/output_*.dat
 M2_qwen/device/input_0.dat
 M2_qwen/scripts/
+M2_qwen/acuity_out/*_sq*/*.data
+M2_qwen/acuity_out/*_sq*/wksp_nbg*/
+M2_qwen/acuity_out/*_sq*/inf*/
+M2_qwen/acuity_out/*_sq*/*.log
+M2_qwen/work/generated/*/*smoothquant*.onnx
+M2_qwen/work/generated/*/*.sq_tmp.onnx
