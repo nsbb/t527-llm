@@ -69,14 +69,17 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 - 11:55 — wiki/ directory + schema.md + index.md + log.md scaffolding
 
 ---
-
-## Rules
-
-- Only append. Never edit past entries.
-- Every entry ties to a specific commit if code was pushed
-- Findings marked with ★ = notable, ★★ = breakthrough
 - 12:28 — SmoothQuant α=0.5 + qbfloat16 quantize (Qwen)
 - 12:29 — **★★ HOST BREAKTHROUGH**: match 30/32, top5 3.69/5, cos_last 0.9965 (FP32-equivalent)
 - 12:35 — NBG export FAILS `Fatal model generation error: 64768` (also bfloat16 and float32 all fail — Qwen too big)
 - 12:38 — SmolLM2 FP32 NB was 626MB — Qwen would be ~4GB, likely exceeds NBG compiler ceiling
 - 12:42 — Result page wiki/results/qwen-sq-qbf16-host.md
+- 12:50 — Attempt SmolLM2 SmoothQuant + qbfloat16: quantize OK, NBG export FAILS 64768 (same as Qwen)
+- 12:54 — SmolLM2 SmoothQuant + uint8: host cos 0.93, argmax 0/32 (uint8 tie-break)
+- 12:58 — Device test: argmax always token 1 (BOS tie-break), but top-5 now prompt-sensitive with real English tokens (Fred, cig, Ober) — SmoothQuant improved over baseline garbage
+- 13:00 — Result page wiki/results/smollm2-sq-uint8-device.md [504aeb5+]
+## Rules
+
+- Only append. Never edit past entries.
+- Every entry ties to a specific commit if code was pushed
+- Findings marked with ★ = notable, ★★ = breakthrough
