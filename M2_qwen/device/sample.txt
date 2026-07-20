@@ -1,0 +1,6 @@
+[network]
+/data/local/tmp/qwen_llm/network_binary.nb
+[input]
+/data/local/tmp/qwen_llm/input_0.dat
+[output]
+/data/local/tmp/qwen_llm/output_0.dat

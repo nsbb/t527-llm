@@ -55,3 +55,14 @@ M1_smollm2/acuity_out/*/*_u8_minmax.quantize
 M1_smollm2/acuity_out/*/inf_calib10/
 M1_smollm2/acuity_out/*/wksp_nbg_calib10*/
 M1_smollm2/acuity_out/*/export_calib10.log
+
+# M2 Qwen large files
+M2_qwen/work/models/qwen2.5-0.5b-instruct/*.safetensors
+M2_qwen/work/generated/*/*.onnx
+M2_qwen/acuity_out/*/*.data
+M2_qwen/acuity_out/*/wksp_nbg_*/
+M2_qwen/acuity_out/*/inf_*/
+M2_qwen/acuity_out/*/*.log
+M2_qwen/device/output_*.dat
+M2_qwen/device/input_0.dat
+M2_qwen/scripts/

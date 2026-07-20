@@ -1,0 +1,36 @@
+{
+  "debug_layer_outputs": false,
+  "external_data": null,
+  "head_dim": 64,
+  "hidden_size": 896,
+  "initializer_bytes": 1976151832,
+  "intermediate_size": 4864,
+  "layers": 24,
+  "lm_head": "transpose(model.embed_tokens.weight)",
+  "lm_head_chunk_outputs": [],
+  "lm_head_chunk_ranges": [
+    [
+      0,
+      151936
+    ]
+  ],
+  "lm_head_chunk_size": null,
+  "lm_head_chunks": 1,
+  "lm_head_output_mode": "concat",
+  "num_attention_heads": 14,
+  "num_key_value_heads": 2,
+  "onnx_path": "work/generated/qwen2.5_0.5b_w32/real_llm.onnx",
+  "output": "last-token logits",
+  "output_names": [
+    "logits"
+  ],
+  "rms_norm_eps": 1e-06,
+  "rope_theta": 1000000.0,
+  "seq_len": 32,
+  "smoothquant_scales": null,
+  "source_model_dir": "work/models/qwen2.5-0.5b-instruct",
+  "tie_word_embeddings": true,
+  "token_embedding": "Gather(token_embed)",
+  "token_embedding_chunked": false,
+  "vocab_size": 151936
+}

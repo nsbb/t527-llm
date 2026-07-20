@@ -1,0 +1,35 @@
+{
+    "Inputs": {
+        "token_ids_1872": {
+            "name": "token_ids",
+            "shape": [
+                1,
+                1,
+                32
+            ],
+            "format": "nchw",
+            "dtype": "int32"
+        }
+    },
+    "Outputs": {
+        "attach_MatMul_logits/out0_0": {
+            "name": "attach_MatMul_logits/out0",
+            "shape": [
+                1,
+                1,
+                32,
+                151936
+            ],
+            "format": "nchw",
+            "quantizer": "asymmetric_affine",
+            "quantize": {
+                "qtype": "u8",
+                "max_value": 15.419971466064453,
+                "min_value": -15.419971466064453,
+                "scale": 0.12094095349311829,
+                "zero_point": 128
+            }
+        }
+    },
+    "Recurrent_connections": {}
+}
