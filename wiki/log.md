@@ -75,3 +75,8 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 - Only append. Never edit past entries.
 - Every entry ties to a specific commit if code was pushed
 - Findings marked with ★ = notable, ★★ = breakthrough
+- 12:28 — SmoothQuant α=0.5 + qbfloat16 quantize (Qwen)
+- 12:29 — **★★ HOST BREAKTHROUGH**: match 30/32, top5 3.69/5, cos_last 0.9965 (FP32-equivalent)
+- 12:35 — NBG export FAILS `Fatal model generation error: 64768` (also bfloat16 and float32 all fail — Qwen too big)
+- 12:38 — SmolLM2 FP32 NB was 626MB — Qwen would be ~4GB, likely exceeds NBG compiler ceiling
+- 12:42 — Result page wiki/results/qwen-sq-qbf16-host.md

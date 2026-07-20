@@ -72,3 +72,12 @@ M2_qwen/acuity_out/*_sq*/inf*/
 M2_qwen/acuity_out/*_sq*/*.log
 M2_qwen/work/generated/*/*smoothquant*.onnx
 M2_qwen/work/generated/*/*.sq_tmp.onnx
+M2_qwen/acuity_out/*/quantize_*.log
+M2_qwen/acuity_out/*/export_*.log
+M2_qwen/acuity_out/*/inf_qbf16/
+M2_qwen/acuity_out/*/inf_i16/
+M2_qwen/acuity_out/*/wksp_nbg_qbf16*/
+M2_qwen/acuity_out/*/wksp_nbg_bf16*/
+M2_qwen/acuity_out/*/wksp_nbg_sqi16hr*/
+M2_qwen/acuity_out/*/*_dfp16.quantize
+M2_qwen/acuity_out/*/*_i16_hr.quantize

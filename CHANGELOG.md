@@ -4,6 +4,23 @@ T527 NPU LLM 포팅 프로젝트. 날짜/버전별 진행 기록.
 
 ---
 
+## v0.7.0 — 2026-07-20 (SmoothQuant + qbfloat16 near-FP32 host)
+
+**★★★ SmoothQuant α=0.5 + qbfloat16 host inference로 30/32 argmax match, cos=0.9965 달성.**
+
+- top-5 last-position 4/5 정확히 일치 (`[576, 4710, 1084, 758, ...]`)
+- FP32 baseline과 사실상 동등한 품질을 quantize에서 회복
+- 그러나 **NBG export 실패**: `Fatal model generation error: 64768`
+- 원인: Qwen NBG 사이즈가 컴파일러 상한 초과 (bfloat16, qbfloat16, float32 전부 같은 에러)
+- SmolLM2-135M FP32 NB는 성공했으므로 (626MB) 크기 문제 확실
+- 다음 시도: chunked NB or W=16 (반절 context)로 사이즈 줄이기, or hybrid layer quant
+
+새 wiki 페이지: `wiki/results/qwen-sq-qbf16-host.md`
+
+Commit: (this one)
+
+---
+
 ## v0.6.0 — 2026-07-20 (Karpathy LLM Wiki 패턴 도입)
 
 **저장소 내 wiki 구조 세팅.**
