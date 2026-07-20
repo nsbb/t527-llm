@@ -88,8 +88,12 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 - 14:28 — W=16 NBG export 264MB success
 - 14:35 — Device test: saturation reduced 19% → 11% (W=16 halves activation memory) but top-5 still tied at int16 max (fl=9 → ±64.0)
 - 14:36 — argmax varies per prompt with W=16, but semantically weak (small model + still-saturating output)
+- 14:45 — W=32 wide-fl patch: output fl 9→6, outlier layers fl-=1 for max_value>20
+- 14:46 — Wide-fl NBG export 267MB
+- 14:47 — Device test: **saturation 19% → 4.7%** (fl=8 gives range ±128) but top-5 still all tied at ±128.0
+- 14:50 — Confirmed: device NPU int16 output values 2x+ FP32 range even with wide fl → true numerical drift limit
 ## Rules
 
 - Only append. Never edit past entries.
 - Every entry ties to a specific commit if code was pushed
-- Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.- 14:15 — W=16 SmolLM2 SmoothQuant + int16 quantize (10 English calib)
+- Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.- 14:15 — W=16 SmolLM2 SmoothQuant + int16 quantize (10 English calib)- 14:41 — W=8 SmolLM2 NBG export (264 MB), device sat=38% (higher than W=32 because Acuity auto-picked fl=10 range ±32)

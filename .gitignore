@@ -91,3 +91,7 @@ M1_smollm2/acuity_out/smollm2_w16_sq/*.data
 M1_smollm2/acuity_out/smollm2_w16_sq/wksp_nbg*/
 M1_smollm2/acuity_out/smollm2_w16_sq/*.log
 M1_smollm2/work/generated/smollm2_135m_w16/
+M1_smollm2/acuity_out/smollm2_w8_sq/*.data
+M1_smollm2/acuity_out/smollm2_w8_sq/wksp_nbg*/
+M1_smollm2/acuity_out/smollm2_w8_sq/*.log
+M1_smollm2/work/generated/smollm2_135m_w8/

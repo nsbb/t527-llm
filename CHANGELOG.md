@@ -4,6 +4,24 @@ T527 NPU LLM 포팅 프로젝트. 날짜/버전별 진행 기록.
 
 ---
 
+## v0.9.0 — 2026-07-20 (Wide-fl 실측: 진짜 device drift 벽)
+
+**W 축소 실험(W=8)로 sat 오히려 증가 (Acuity auto-fl 문제).**
+**wide-fl 수동 patch (output fl=6, outlier layers fl-=1)로 W=32 saturation 4.7%까지 감소.**
+
+- W=32 baseline int16 (fl=9): 19% sat
+- W=16 int16 (fl=9): 11% sat (activation 절반)
+- W=8 int16 (fl=10): 38% sat (Acuity가 auto로 좁은 fl 선택)
+- **W=32 wide-fl (output=fl6 range ±128): 4.7% sat**
+
+**하지만 top-5는 여전히 int16 max tied.** device NPU int16 산술이 FP32 대비 값 2배+ 부풀림. wider fl로도 못 커버. 진짜 device drift 물리적 한계.
+
+`patch_quantize_headroom.py` (fl 조정 유틸) + inline python 스크립트로 outlier layer 자동 검출.
+
+Commit: (this one)
+
+---
+
 ## v0.8.5 — 2026-07-20 (W=16 실측: saturation 절반)
 
 **Window 축소 실험: W=32 → W=16.**
