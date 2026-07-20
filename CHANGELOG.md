@@ -4,6 +4,29 @@ T527 NPU LLM 포팅 프로젝트. 날짜/버전별 진행 기록.
 
 ---
 
+## v0.8.0 — 2026-07-20 (SmolLM2 SmoothQuant + int16 device: 첫 토큰 semantic 성공)
+
+**M1 SmolLM2 SmoothQuant + int16 dfp NBG (267 MB) 디바이스 실측.**
+
+- 파이프라인이 HW native path 사용: quantize dynamic_fixed_point int16 → NBG export 성공 (Qwen과 달리 fatal 64768 안 남 — SmolLM2가 작아서)
+- Device output `data_format=5, dfp=9` (int16, scale = 1/512)
+- **★ 첫 토큰 실제 정확 예측**:
+  - `"def hello"` → argmax = **`(`** (token 24) — Python 문법 정확
+  - `"class Point"` → argmax = `*`
+- 하지만 19% saturation → multi-token feedback loop에서 급속 붕괴
+- Host: match 25/32, top5 3.91/5 (Qwen 결과와 유사)
+
+`wiki/results/smollm2-sq-int16-device.md` 추가.
+
+다음: 
+- `--hybrid` 모드 (per-layer precision 자동 선택)
+- α 더 aggressive (0.8~1.0)로 activation outlier 완전 제거
+- lm_head output만 별도 precision 유지
+
+Commit: (this one)
+
+---
+
 ## v0.7.5 — 2026-07-20 (Hardware reality check)
 
 **결정적 재해석: T527 VIP9000-NanoSI-Plus는 INT8 HW only.**

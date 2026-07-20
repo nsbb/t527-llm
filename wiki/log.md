@@ -78,10 +78,15 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 - 12:54 — SmolLM2 SmoothQuant + uint8: host cos 0.93, argmax 0/32 (uint8 tie-break)
 - 12:58 — Device test: argmax always token 1 (BOS tie-break), but top-5 now prompt-sensitive with real English tokens (Fred, cig, Ober) — SmoothQuant improved over baseline garbage
 - 13:00 — Result page wiki/results/smollm2-sq-uint8-device.md [504aeb5+]
+- 13:07 — Hardware precision table added to wiki/hardware/t527-vip9000.md
+- 13:10 — Strategy pivot: any coherent-generation solution MUST fit within uint8/int16 fixed-point. qbf16 host wins are informational only.
+- 13:15 — SmolLM2 SmoothQuant + int16 quantize + export success (267 MB NBG)
+- 13:16 — Device test with -b 0: 19% saturation, argmax varies per prompt
+- 13:17 — **★ First-token semantic success**: 'def hello' → argmax token 24 = `(`  (correct Python next-token)
+- 13:18 — Multi-token greedy: first token often correct, then degrades (`def hello(5)/�?2/9:`) — saturation feedback loop
+- 13:22 — Result page wiki/results/smollm2-sq-int16-device.md
 ## Rules
 
 - Only append. Never edit past entries.
 - Every entry ties to a specific commit if code was pushed
 - Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.
-- 13:07 — Hardware precision table added to wiki/hardware/t527-vip9000.md
-- 13:10 — Strategy pivot: any coherent-generation solution MUST fit within uint8/int16 fixed-point. qbf16 host wins are informational only.
