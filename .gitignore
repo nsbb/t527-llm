@@ -119,3 +119,6 @@ M2_qwen/acuity_out/qwen_hidden_gs/*.log
 M2_qwen/work/generated/*/real_llm_sq03*.onnx
 M2_qwen/work/generated/*/real_llm_sq_hidden_gscaled.onnx
 M2_qwen/host_gscale.npy
+M1_smollm2/acuity_out/smollm2_hidden_c100/*.data
+M1_smollm2/acuity_out/smollm2_hidden_c100/wksp_nbg*/
+M1_smollm2/acuity_out/smollm2_hidden_c100/*.log

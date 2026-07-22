@@ -117,3 +117,14 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 - Only append. Never edit past entries.
 - Every entry ties to a specific commit if code was pushed
 - Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.- 14:15 — W=16 SmolLM2 SmoothQuant + int16 quantize (10 English calib)- 14:41 — W=8 SmolLM2 NBG export (264 MB), device sat=38% (higher than W=32 because Acuity auto-picked fl=10 range ±32)- 15:05 — CPU-side lm_head approach: cut lm_head off NPU graph, output final_rms_out hidden state, run final MatMul on host- 15:38 — Qwen SmoothQuant + hidden output uint8 quantize (24-layer, 143MB IR)- 16:10 — patch_hidden_scale.py written (force max/min for output tensor via quantize edit)- 16:38 — SmoothQuant α=0.3 (덜 aggressive) 시도 → hidden max 여전히 214 (RMSNorm gamma 자체가 큼)
+## 2026-07-22
+
+- 09:37 — Started SmolLM2-360M download (720MB, slow ~5MB/min via HF direct)
+- 09:48 — 100-sample calibration (10 English domain buckets × 10 prompts each) for SmolLM2 hidden uint8
+- 10:14 — SmolLM2 hidden c100 NBG (104MB) export
+- 10:15 — Device test: cos improved 0.45 → **0.65 max, avg 0.5** across prompts. Actual semantic top-5:
+  - "1 + 1 =" → `1`, `2`, `3`, `'s`, `0` (2 is correct!)
+  - "Once upon a time" → `1`, `'s`, `**`, `Bob` (Bob = name plausible)
+  - "def hello" → `1`, `\n`, ` and`, `\xa0`
+- 10:18 — Multi-token gen: still degenerates to repetitive `1` due to feedback loop
+- 10:20 — Cos ~0.5 needed for single-token; need > 0.9 (FP32-level) for multi-token coherence

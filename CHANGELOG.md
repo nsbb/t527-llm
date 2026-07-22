@@ -4,6 +4,24 @@ T527 NPU LLM 포팅 프로젝트. 날짜/버전별 진행 기록.
 
 ---
 
+## v0.12.0 — 2026-07-22 (100-sample calibration: cos 0.45 → 0.65)
+
+**SmolLM2 hidden uint8 재양자화 with 100 diverse English prompts** (facts × code × narrative × QA × math × chat 각 20~25).
+
+- Cos vs ORT hidden: prompts별 0.33~0.65 (평균 ~0.50, 이전 10-sample은 0.45 평균)
+- 실제 semantic 정확도 개선:
+  - `"1 + 1 ="` top-5: `1`, **`2`**, `3`, `'s`, `0` — 답 `2`가 top-2에 위치
+  - `"Once upon a time"` top-5: 포함 **`Bob`** (name plausible)
+  - `"def hello"` top-5: 포함 `\n` (Python 다음 줄 plausible)
+- 그러나 multi-token generation은 여전히 feedback loop로 붕괴 → 반복 `1`
+- **결론**: 단일 토큰 예측 품질은 계속 개선 가능, coherent generation은 cos > 0.9 필요 (FP32-level)
+
+동시에 SmolLM2-360M safetensors 다운로드 중 (720MB, HF 느림 ~5MB/min).
+
+Commit: (this one)
+
+---
+
 ## v0.11.0 — 2026-07-20 (Gamma scaling: 표면 개선 있으나 근본 해결 아님)
 
 **최종 실험: `final_rms_gamma /= 8` 로 hidden range 축소 → host에서 K=8 복원.**
