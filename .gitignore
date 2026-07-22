@@ -122,3 +122,9 @@ M2_qwen/host_gscale.npy
 M1_smollm2/acuity_out/smollm2_hidden_c100/*.data
 M1_smollm2/acuity_out/smollm2_hidden_c100/wksp_nbg*/
 M1_smollm2/acuity_out/smollm2_hidden_c100/*.log
+M1_smollm2/work/models/smollm2-360m-instruct/*.safetensors
+M1_smollm2/work/generated/smollm2_360m_w32/
+M1_smollm2/acuity_out/smollm2_360m_hidden/*.data
+M1_smollm2/acuity_out/smollm2_360m_hidden/wksp_nbg*/
+M1_smollm2/acuity_out/smollm2_360m_hidden/*.log
+M1_smollm2/token_embed_360m.npy

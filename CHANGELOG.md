@@ -4,6 +4,26 @@ T527 NPU LLM 포팅 프로젝트. 날짜/버전별 진행 기록.
 
 ---
 
+## v0.12.5 — 2026-07-22 (SmolLM2-360M 실측: 예상대로 열등)
+
+**바로 큰 모델(360M) → 더 나쁜 결과 확인.**
+
+- 360M SmoothQuant + uint8 hidden NB (252MB) export 성공 (fatal 아님, Qwen-0.5B와 크기 비슷하지만 vocab 3배 작아서)
+- Device 실측 cos: **0.05~0.38** (135M은 0.33~0.65)
+- 여러 프롬프트에서 top-5 tokens 동일 (`staking`, `graduates`, `queous`, `tees`, `uator`) — quantization drift가 입력 신호 압도
+
+**135M이 T527 int8 NPU sweet spot 확정**:
+- 파라미터 적음 → 32→30 layers × narrower hidden → drift accumulation 적음
+- 135M: 실제 semantic tokens 나옴 (cos 0.5+)
+- 360M: 상수 tokens (bias-dominated)
+- 500M+ Qwen: 유사 문제
+
+배포용 권장: **SmolLM2-135M-Instruct + SmoothQuant + uint8 hidden + host lm_head**.
+
+Commit: (this one)
+
+---
+
 ## v0.12.0 — 2026-07-22 (100-sample calibration: cos 0.45 → 0.65)
 
 **SmolLM2 hidden uint8 재양자화 with 100 diverse English prompts** (facts × code × narrative × QA × math × chat 각 20~25).
