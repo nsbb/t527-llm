@@ -141,6 +141,12 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 - 12:57 — Qwen '안녕하세요, 저는' cos 0.03→0.82, '봄이 오면 벚꽃이' cos 0.04→0.85
 - 12:58 — English prompts hurt by Korean-heavy calib bias (expected)
 - 13:00 — wiki/techniques/bias-correction.md created + push
+- 13:04 — Multi-token top-k=10 temp=1.0: variety but still not English-coherent
+- 13:05 — **M2 conclusion**: Bias correction is a real first-token win but multi-token requires online adaptation (M3 target)
+- 13:15 — Repetition penalty for both SmolLM2 & Qwen: some variety but still not coherent multi-token
+- 13:22 — First-token benchmark 12 prompts (SmolLM2 135M):
+- 13:24 — SmolLM2-135M FP32 itself is weak on padded-end prompts (predicts '\n' for most)
+- 13:25 — Bias correction moves needle but 135M model too small for meaningful benchmark
 ## Rules
 
 ## 2026-07-22
@@ -148,5 +154,6 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
   - "1 + 1 =" → `1`, `2`, `3`, `'s`, `0` (2 is correct!)
   - "Once upon a time" → `1`, `'s`, `**`, `Bob` (Bob = name plausible)
   - "def hello" → `1`, `\n`, ` and`, `\xa0`- 2026-07-24 10:00 — Session resume: check state post-100-sample calib- 12:51 — Scaled bias calibration to 100 SmolLM2 prompts; 3 variants (all/content/pos)- 13:02 — Trajectory bias attempt (20 prompts × 10 shifts): random-token continuation didn't produce useful bias
-- 13:04 — Multi-token top-k=10 temp=1.0: variety but still not English-coherent
-- 13:05 — **M2 conclusion**: Bias correction is a real first-token win but multi-token requires online adaptation (M3 target)
+    Top-1 raw:  0/12 (0%)
+    Top-1 bias: 1/12 (8%) — `def fibonacci(n):` → '\n' matches
+    Top-5 bias: 2/12 (17%)

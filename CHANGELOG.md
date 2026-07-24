@@ -24,6 +24,24 @@ Commit: (this one)
 
 ---
 
+## v0.13.5 — 2026-07-24 (Repetition penalty + first-token benchmark)
+
+**Multi-token variety + reproducible benchmark harness.**
+
+- `generate_hidden_reppen.py` (both SmolLM2 and Qwen): top-k + rep-penalty
+- SmolLM2 rep-penalty output: more varied tokens (` (`, ` \n`, ` de`, ` spot`) but still noise
+- Qwen Korean rep-penalty: 첫 토큰 여전히 `\n` 지배
+- `benchmark_bias.py`: 12 held-out prompts, measures top-1/top-5 vs FP32
+- **Result**: 135M raw 0/12, +bias 1/12, +bias top-5 2/12
+- 135M is genuinely too small to make bench meaningful — most FP32 top-1s are `\n`
+
+Conclusion: bias correction is a real signal (Qwen cos 0.06→0.88, SmolLM2 cos 0.33→0.58) 
+but 135M SmolLM2 is too small for benchmark validation. Move to larger models (360M, Qwen 500M).
+
+Commit: (this one)
+
+---
+
 ## v0.13.0 — 2026-07-24 (★★ Qwen Korean bias correction: cos 0.06 → 0.88)
 
 **Big Korean LLM breakthrough on T527.**
