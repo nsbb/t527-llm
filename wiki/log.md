@@ -135,10 +135,16 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 - 10:05 — 'The capital of France is Paris.' cos 0.45 → 0.55, next tok `,` (period → comma OK)
 - 10:07 — Multi-token bias-corrected still weak — window shift moves distribution away from calib
 - 10:10 — Wiki + commit
+- 12:53 — Content-bias best: cos 0.33→0.58 def hello, 0.45→0.59 France
+- 12:54 — Multi-token debug: cos 0.5 not enough for stable argmax, drifts by step 2
+- 12:56 — **Qwen bias correction with 20 KR+EN prompts: cos 0.06→0.88 for '한국의 수도는' ★★**
+- 12:57 — Qwen '안녕하세요, 저는' cos 0.03→0.82, '봄이 오면 벚꽃이' cos 0.04→0.85
+- 12:58 — English prompts hurt by Korean-heavy calib bias (expected)
+- 13:00 — wiki/techniques/bias-correction.md created + push
 ## Rules
 
 ## 2026-07-22
 
   - "1 + 1 =" → `1`, `2`, `3`, `'s`, `0` (2 is correct!)
   - "Once upon a time" → `1`, `'s`, `**`, `Bob` (Bob = name plausible)
-  - "def hello" → `1`, `\n`, ` and`, `\xa0`- 2026-07-24 10:00 — Session resume: check state post-100-sample calib
+  - "def hello" → `1`, `\n`, ` and`, `\xa0`- 2026-07-24 10:00 — Session resume: check state post-100-sample calib- 12:51 — Scaled bias calibration to 100 SmolLM2 prompts; 3 variants (all/content/pos)

@@ -24,6 +24,32 @@ Commit: (this one)
 
 ---
 
+## v0.13.0 — 2026-07-24 (★★ Qwen Korean bias correction: cos 0.06 → 0.88)
+
+**Big Korean LLM breakthrough on T527.**
+
+- SmolLM2 100-prompt bias measurement (`compute_bias.py`): confirmed |max|=6.5 content bias
+- **Qwen with 15 KR + 5 EN calibration bias**:
+  - `한국의 수도는` cos 0.06 → **0.88**
+  - `안녕하세요, 저는` cos 0.03 → **0.82**
+  - `봄이 오면 벚꽃이` cos 0.04 → **0.85**
+  - Top-3 after correction: `\n`, `\xa0`, `,` (whitespace/punctuation semantically OK)
+- Bias vector is Korean-specific — English prompts hurt (0.31 → 0.19 for France)
+- Multi-token still limited (window shift moves distribution)
+
+Files:
+- `M1_smollm2/compute_bias.py` — bias measurement tool
+- `M1_smollm2/device_bias_c100_{all,content,pos}.npy`
+- `M2_qwen/device_bias_{all,content}.npy` — Korean bias
+- `M2_qwen/device/generate_hidden_biascorr.py`
+- `wiki/techniques/bias-correction.md`
+
+**Effective M2 completion**: Korean-capable LLM produces plausible first-token predictions on T527 NPU.
+
+Commit: (this one)
+
+---
+
 ## v0.12.0 — 2026-07-22 (100-sample calibration: cos 0.45 → 0.65)
 
 **SmolLM2 hidden uint8 재양자화 with 100 diverse English prompts** (facts × code × narrative × QA × math × chat 각 20~25).
