@@ -147,4 +147,6 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 
   - "1 + 1 =" → `1`, `2`, `3`, `'s`, `0` (2 is correct!)
   - "Once upon a time" → `1`, `'s`, `**`, `Bob` (Bob = name plausible)
-  - "def hello" → `1`, `\n`, ` and`, `\xa0`- 2026-07-24 10:00 — Session resume: check state post-100-sample calib- 12:51 — Scaled bias calibration to 100 SmolLM2 prompts; 3 variants (all/content/pos)
+  - "def hello" → `1`, `\n`, ` and`, `\xa0`- 2026-07-24 10:00 — Session resume: check state post-100-sample calib- 12:51 — Scaled bias calibration to 100 SmolLM2 prompts; 3 variants (all/content/pos)- 13:02 — Trajectory bias attempt (20 prompts × 10 shifts): random-token continuation didn't produce useful bias
+- 13:04 — Multi-token top-k=10 temp=1.0: variety but still not English-coherent
+- 13:05 — **M2 conclusion**: Bias correction is a real first-token win but multi-token requires online adaptation (M3 target)
