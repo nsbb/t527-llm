@@ -42,6 +42,28 @@ Commit: (this one)
 
 ---
 
+## v0.12.0 — 2026-07-24 (★ Per-channel bias correction: first-token semantic 회복)
+
+**진단**: NPU device output hidden state에 **per-channel systematic bias** 존재.
+- Channel 507: -15.1 offset (극단)
+- 51개 채널 |bias| > 1
+- 3개 채널 |bias| > 3
+
+**해결**: 20개 캘리브 프롬프트로 device_hidden - ort_hidden 평균을 채널별로 계산 → subtract at inference.
+
+**결과 (single-position argmax)**:
+- 'def hello' cos 0.33 → **0.57**, top-5: `\n` `(` ` ` `and` `the` (Python 문법 정확)
+- 'The capital of France is Paris.' cos 0.45 → 0.55, argmax `,` (period → comma OK)
+- 'Once upon a time' cos 0.65 → 0.70
+
+**한계**: Multi-token greedy는 여전히 반복적 — window sliding으로 activation distribution이 calib과 벗어남. 다음 방향: recursive calibration (매 스텝 window에서 bias 재계산).
+
+`device/generate_hidden_biascorr.py` 추가.
+
+Commit: (this one)
+
+---
+
 ## v0.11.0 — 2026-07-20 (Gamma scaling: 표면 개선 있으나 근본 해결 아님)
 
 **최종 실험: `final_rms_gamma /= 8` 로 hidden range 축소 → host에서 K=8 복원.**

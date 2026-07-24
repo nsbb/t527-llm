@@ -123,15 +123,22 @@ Format: `YYYY-MM-DD HH:MM — <what happened> [commit-hash]`
 - 12:39 — Device test: **cos 0.05~0.38 (135M was 0.33~0.65) — MUCH WORSE**
 - 12:40 — Top-5 tokens identical across different prompts (35894, 15752, 33741...) — quantization drift dominates signal
 - 12:42 — CONFIRMED: 135M is sweet spot for T527 int8, 360M's 32-layer compound drift makes it garbage
-## Rules
-
 - Only append. Never edit past entries.
 - Every entry ties to a specific commit if code was pushed
 - Findings marked with ★ = notable, ★★ = breakthrough- 13:05 — Realization: T527 VIP9000-NanoSI-Plus has NO FP HW. bf16/qbf16 export failures aren't bugs — Acuity NBG compiler correctly refuses to emit code for absent HW. SmolLM2 FP32 NB "works" only via CPU fallback SW-emul (80x slower). Only uint8/int16 are viable for production.- 14:15 — W=16 SmolLM2 SmoothQuant + int16 quantize (10 English calib)- 14:41 — W=8 SmolLM2 NBG export (264 MB), device sat=38% (higher than W=32 because Acuity auto-picked fl=10 range ±32)- 15:05 — CPU-side lm_head approach: cut lm_head off NPU graph, output final_rms_out hidden state, run final MatMul on host- 15:38 — Qwen SmoothQuant + hidden output uint8 quantize (24-layer, 143MB IR)- 16:10 — patch_hidden_scale.py written (force max/min for output tensor via quantize edit)- 16:38 — SmoothQuant α=0.3 (덜 aggressive) 시도 → hidden max 여전히 214 (RMSNorm gamma 자체가 큼)
-## 2026-07-22
-
 - 09:37 — Started SmolLM2-360M download (720MB, slow ~5MB/min via HF direct)
 - 09:48 — 100-sample calibration (10 English domain buckets × 10 prompts each) for SmolLM2 hidden uint8
+- 10:00 — c100 NB multi-token greedy: still repetitive '1' spam despite cos 0.65 host
+- 10:01 — **Root cause diagnosis**: per-channel bias in device hidden state (ch 507 = -15.1 offset)
+- 10:02 — 20-prompt bias estimation: |max|=6.7, |mean|=0.52 per channel
+- 10:03 — **Bias correction test**: 'def hello' cos 0.33 → 0.57, top-5 = `\n`, `(`, ` `, `and`, `the` (semantic Python!)
+- 10:05 — 'The capital of France is Paris.' cos 0.45 → 0.55, next tok `,` (period → comma OK)
+- 10:07 — Multi-token bias-corrected still weak — window shift moves distribution away from calib
+- 10:10 — Wiki + commit
+## Rules
+
+## 2026-07-22
+
   - "1 + 1 =" → `1`, `2`, `3`, `'s`, `0` (2 is correct!)
   - "Once upon a time" → `1`, `'s`, `**`, `Bob` (Bob = name plausible)
-  - "def hello" → `1`, `\n`, ` and`, `\xa0`
+  - "def hello" → `1`, `\n`, ` and`, `\xa0`- 2026-07-24 10:00 — Session resume: check state post-100-sample calib
